@@ -9,9 +9,9 @@ vue3 + pinia + wangEditor + element-plus 实现可配置化帮助中心
 6. 另有tinyMCE、ckEditor、vmdEdiotr多个编辑器试用
 
 编辑
-![An image](https://github.com/sjbhz/help-center-web/tree/main/public/images/editImg.png)
+![An image](https://github.com/sjbhz/help-center-web/blob/main/public/images/editImg.png)
 预览
-![An image](https://github.com/sjbhz/help-center-web/tree/main/public/images/reviewImg.png)
+![An image](https://github.com/sjbhz/help-center-web/blob/main/public/images/reviewImg.png)
 
 ### Project Setup
 
