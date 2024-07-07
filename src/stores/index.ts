@@ -12,6 +12,6 @@ export function setupStore(app: App<Element>) {
 }
 
 export * from './modules/user'
-export * from './modules/permissions'
 export * from './modules/naviInfo'
+export * from './modules/permissions'
 export { pinia }

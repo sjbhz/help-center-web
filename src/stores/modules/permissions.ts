@@ -1,13 +1,13 @@
 import { pinia } from '@/stores'
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-
+ 
 interface Current {
   isView: Boolean,
   ver: number,
   breadcrumb: any[],
   naviInfo: {},
-  htmlContent: String,
+  htmlContent:String,
   menuInfo: {},
   docInfo: {},
 }
@@ -18,26 +18,26 @@ interface Current {
 export const usePermissionStore = defineStore('permissions', () => {
   const current = ref<Current>({
     isView: true, // true：浏览状态；false：编辑状态
-    ver: new Date().valueOf(), // 版本信息 
+    ver: new Date().valueOf(), // 版本信息
     // 面包屑，存放激活的每一级菜单的ID和名称，以及path
     breadcrumb: [],
     // 当前导航项信息
     naviInfo: {
-      id: 1,
-      naviId: 1, //当前导航项ID，据此加载菜单列表
-      name: '',
+      id:1,
+      naviId:1, //当前导航项ID，据此加载菜单列表
+      name:'',
       sort: 1,
-    },
+    }, 
     menuInfo: { // 当前激活的菜单项
-      id: 1,
-      name: "操作指南",
+      id :  1,
+      name :  "操作指南",
       parent: 0,
       parentTopId: 1,
-      sort: 1,
-      subList: [],
-      type: 0,
+      sort:1,
+      subList:[],
+      type:  0,
     },
-    htmlContent: '',
+    htmlContent:'',
     docInfo: { // 当前激活的文档内容
       md: '# 这是标题', // 编辑文档的内容
       ver: 1.0,
@@ -52,10 +52,13 @@ export const usePermissionStore = defineStore('permissions', () => {
       comp: {} // 一个文档包含的可以运行的组件 上一步、下一步
     }
   })
+
+  // const menuList = ref<any[]>([])
+  // 测试用
   const menuList = ref<any[]>([
     {
       "id": "10_introduce",
-      "name": "介绍11111111111111111111",
+      "name": "介绍11",
       "description": "描述",
       "icon": "Document",
       "subList": []
@@ -144,11 +147,8 @@ export const usePermissionStore = defineStore('permissions', () => {
     counter.value++
   }
 
-  // 定义根据导航获取菜单的方法
-  // const 
-
   return {
-    current,
+    current, 
     menuList,
     counterComputer,
     add

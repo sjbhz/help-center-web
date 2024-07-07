@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import { Codemirror } from 'vue-codemirror'
-import { ref } from 'vue'
+import { ref, defineProps } from 'vue'
 
 // 接受的参数
 const props = withDefaults(defineProps(), {

@@ -15,20 +15,9 @@ const store = usePermissionStore()
 </script>
 
 <script setup>
-
 const { current } = storeToRefs(store)
 
 const breadcrumb = current.breadcrumb
-// const { loadDocById } = mdController()
 
-const myClick = (menu) => {
-  // loadDocById(menu.id)
-  //   .then((res) => {
-  //     // 找到了文档
-  //     Object.assign(current.docInfo, res)
-  //   }).catch((res) => {
-  //     // 没有文档
-  //     Object.assign(current.docInfo, res)
-  //   })
-}
+const myClick = (menu) => {}
 </script>

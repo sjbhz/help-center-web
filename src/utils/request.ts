@@ -40,8 +40,7 @@ service.interceptors.response.use(
           confirmButtonText: '确定',
           callback: () => {
             ; (window as any).objWin = window.open(
-              '/passport-web/login?return_uri=' + old_url,
-              '_top'
+              '/passport-web/login?return_uri=' + old_url
             )
           }
         })
@@ -49,7 +48,7 @@ service.interceptors.response.use(
       return Promise.reject(data)
     }
     // 成功返回数据
-    if (data.code) {
+    if (data.success) {
       return data
     }
     // 响应数据为二进制流处理(Excel导出)
@@ -58,32 +57,9 @@ service.interceptors.response.use(
     }
     // 单独处理
     return response
-    // return Promise.reject(new Error(data.message || 'Error'))
   },
   (error: any) => {
- 
-    // token过期后请求会变成401，重新登录处理
-    const old_url = (top as any).location.href
-    if (error.response.status === 401) { // 在error对象中 可以看到状态 是否为401
-      ElMessage({
-        message: '无效的token，请重新登录',
-        type: 'error',
-        duration: 2 * 1000
-      })
-      window.setTimeout(() => {
-        ElMessageBox.alert('token已过期，请重新登录操作', '提示', {
-          confirmButtonText: '确定',
-          callback: () => {
-            ; (window as any).objWin = window.open(
-              '/passport-web/login?return_uri=' + old_url,
-              '_top'
-            )
-          }
-        })
-      }, 1 * 1000)
-
-
-    }
+    // return Promise.reject(error.message)
     return ElMessage.error({ message: "系统错误，请联系管理员！", showClose: true });
   }
 )

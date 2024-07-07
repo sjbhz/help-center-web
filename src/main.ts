@@ -56,12 +56,12 @@ if (token) {
 
 //用户id
 const params = new URLSearchParams(new URL(window.location as any).search)
-let userId = params.get('ccuserId')
+let userId = params.get('huserId')
 if (userId) {
-  localStorage.setItem('ccuserId', userId)
+  localStorage.setItem('huserId', userId)
   localStorage.setItem('userId', userId)
 } else {
-  userId = localStorage.getItem('ccuserId') || localStorage.getItem('userId')
+  userId = localStorage.getItem('huserId') || localStorage.getItem('userId')
 }
 
 // 全局注册 状态管理(store)

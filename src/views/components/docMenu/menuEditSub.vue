@@ -1,68 +1,67 @@
 <template>
-  <template v-for="(item, index) in subMenu">
-    <template v-if="item.type == -1">
-      <!-- 提示 指南/快速上手 -->
-      <div style="padding:20px;font-size:17px;font-weight:bold">{{ item.name }}</div>
-    </template>
-    <template v-else>
-      <!--树枝-->
-      <template v-if="item.subList && item.subList.length > 0">
-        <el-sub-menu :key="item.id + '_' + index" :index="String(item.id)" style="vertical-align: middle;">
+  <div>
+    <template v-for="(item, index) in subMenu" :key="item.id">
+      <template v-if="item.type === -1">
+        <!-- 提示 指南/快速上手 -->
+        <div style="margin:20px;font-size:17px;font-weight:bold">{{ item.name }}</div>
+      </template>
+      <template v-else>
+
+        <!--树枝-->
+        <template v-if="item.subList && item.subList.length > 0">
+          <el-sub-menu :key="'subMenu_' + item.id" :index="String(item.id)" style="vertical-align: middle;">
+            <template #title>
+              <div style="display:inline;width: 100%;">
+                <span class="left_menu_list" :title="item.name">{{ item.name }}</span> &nbsp; &nbsp;
+                <span class="optionBtn">
+                  <!--操作按钮-->
+                  <menu-option v-show="!current.isView" :subMenu="subMenu" :current="current" :menu="item" :index="index"
+                    :dialogAddInfo="dialogAddInfo" :dialogModInfo="dialogModInfo">
+                  </menu-option>
+                </span>
+              </div>
+            </template>
+            <!--递归子菜单-->
+            <my-sub-menu2 :subMenu="item.subList" :dialogAddInfo="dialogAddInfo" :dialogModInfo="dialogModInfo" />
+          </el-sub-menu>
+        </template>
+
+        <!--树叶-->
+        <el-menu-item v-else :index="String(item.id)" :key="'menuItem_' + item.id" @click="clickMenuEdit(item, index)">
           <template #title>
             <div style="display:inline;width: 100%;">
-              <component :is="item.icon" class="menu_edit_icon">
-              </component>
               <span class="left_menu_list" :title="item.name">{{ item.name }}</span> &nbsp; &nbsp;
               <span class="optionBtn">
                 <!--操作按钮-->
-                <menu-option v-if="!current.isView" :subMenu="subMenu" :current="current" :menu="item" :index="index"
+                <menuOption v-show="!current.isView" :subMenu="subMenu" :current="current" :menu="item" :index="index"
                   :dialogAddInfo="dialogAddInfo" :dialogModInfo="dialogModInfo">
-                </menu-option>
+                </menuOption>
               </span>
             </div>
           </template>
-          <!--递归子菜单-->
-          <my-sub-menu2 :subMenu="item.subList" :dialogAddInfo="dialogAddInfo" :dialogModInfo="dialogModInfo" />
-        </el-sub-menu>
-      </template>
-      <!--树叶-->
-      <el-menu-item v-else :index="String(item.id)" :key="item.id + 'son_' + index" @click="clickMenuEdit(item, index)">
-        <template #title>
-          <div style="display:inline;width: 100%;">
-            <span style="float: left;">
-              <component :is="item.icon" class="menu_edit_icon">
-              </component>
-              <span class="left_menu_list" :title="item.name">{{ item.name }}</span> &nbsp; &nbsp;
-            </span>
-            <span  class="optionBtn">
-              <!--操作按钮-->
-              <menuOption v-if="!current.isView" :subMenu="subMenu" :menu="item" :current="current" :index="index"
-                :dialogAddInfo="dialogAddInfo" :dialogModInfo="dialogModInfo">
-              </menuOption>
-            </span>
-          </div>
-        </template>
-      </el-menu-item>
-    </template>
-  </template>
-</template>
+        </el-menu-item>
 
+      </template>
+    </template>
+
+
+  </div>
+</template>
 
 <script setup>
 import mySubMenu2 from './menuEditSub.vue'
 import menuOption from './menuOption.vue'
-import { reactive, ref, watch, toRaw } from 'vue'
+import { getArticleInfo } from '@/api/config'
+import { reactive, ref, defineProps, watch, toRaw } from 'vue'
 import { useNaviInfoStore, usePermissionStore } from '@/stores'
 import { storeToRefs } from 'pinia';
 import { ElMessage, ElNotification } from 'element-plus'
-
 const props = defineProps({
   current: Object,
   subMenu: Array, // 要显示的菜单，可以n级
   dialogAddInfo: Object, // 添加菜单
-  dialogModInfo: Object // 修改菜单
+  dialogModInfo: Object, // 修改菜单
 })
-
 
 const {
   dialogAddInfo,
@@ -98,11 +97,12 @@ const getArticle = (item) => {
       articleContent.value = ''
     }
     // ElMessage.success('文本内容获取成功')
-    ElNotification({
-      message: '文本内容获取成功',
-      type: 'success',
-      duration: 2000
-    })
+
+    // ElNotification({
+    //   message: '文本内容获取成功',
+    //   type: 'success',
+    //   duration: 2000
+    // })
   } else {
     articleContent.value = ''
     ElMessage.error(res.message)
@@ -140,7 +140,8 @@ const clickMenuEdit = (item, index) => {
 .left_menu_list {
   display: inline-block;
   vertical-align: middle;
-  width: 130px; 
+  width: 150px;
+  /* max-width: calc(100%-0.9em); */
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

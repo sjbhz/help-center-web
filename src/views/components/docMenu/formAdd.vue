@@ -1,11 +1,12 @@
 <template>
   <!--弹窗，添加菜单 :append-to-body="true" -->
-  <div v-dialog-drag="dialogInfo.width">
+  <!-- v-dialog-drag="dialogInfo.width" -->
+  <div>
     <el-dialog title="添加菜单" v-model="dialogInfo.isShow" :modal="true" :width="dialogInfo.width"
       :close-on-click-modal="true" :destroy-on-close="true">
-      <el-scrollbar style="height:340px;margin: 2px;">
+      <el-scrollbar style="height:200px;margin: 2px;">
         <el-form :model="form" label-width="auto" style="max-width: 98%">
-          <el-form-item label="当前菜单名称">
+          <el-form-item label="当前菜单名称" v-if="false">
             <el-input v-model="form.currentName" disabled="" />
           </el-form-item>
           <el-form-item label="新菜单名称">
@@ -17,7 +18,7 @@
               <el-radio value="2">子级</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="插入到指定位置">
+          <el-form-item label="插入到指定位置" v-if="false">
             <el-switch v-model="form.delivery" />
             <span style="display:inline-block;margin-left:10px;color:#aaa">* 默认追加到最后</span>
           </el-form-item>
@@ -27,15 +28,12 @@
               <el-option label="Zone two" value="beijing" />
             </el-select>
           </el-form-item>
-          <el-form-item label="描述">
-            <el-input v-model="form.desc" type="textarea" />
-          </el-form-item>
         </el-form>
       </el-scrollbar>
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="addOne">保存</el-button>
-          <el-button type="primary" plain @click="addMore">保存&添加</el-button>
+          <!-- <el-button type="primary" plain @click="addMore">保存&继续</el-button> -->
         </div>
       </template>
     </el-dialog>
@@ -43,9 +41,10 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
+import { reactive,defineProps, ref } from 'vue'
 import { ElForm, ElButton, ElDialog, ElScrollbar, ElMessage } from 'element-plus'
-// import { addMainFormMenu, addChildFormMenu } from '@/api/config'
+import { addMainFormMenu, addChildFormMenu } from '@/api/config'
+
 </script>
 
 <script setup>
@@ -62,22 +61,12 @@ const props = defineProps({
   current: Object,
   dialogInfo: Object,
 })
+
 const info = props.dialogInfo
 const current = props.current
 const cmenu = info.menu //info.menu:点击添加的当前menu
 form.currentName = ref(info.menu.name)
 form.kind = ref('1') //默认同级
-
-// 清空表单
-const initForm = () => {
-  form.id = ''
-  form.currentName = ''
-  form.newName = ''
-  form.region = ''
-  form.kind = ''
-  form.delivery = false
-  form.icon = 'FolderOpened'
-}
 
 // 添加菜单
 const addNewMenu = (form) => {
@@ -135,16 +124,21 @@ const addNewMenu = (form) => {
   }
 }
 
+// 清空表单
+const initForm = () => {
+  form.id = ''
+  form.currentName = ''
+  form.newName = ''
+  form.region = ''
+  form.kind = ''
+  form.delivery = false
+  // form.icon = 'FolderOpened'
+}
 
 // 添加一个
 const addOne = () => {
   addNewMenu(form)
 
-  // 清空表单
-  // form.name = ''
-  // form.description = ''
-  // form.link = ''
-  // form.icon = 'FolderOpened'
   info.isShow = false
 }
 

@@ -5,7 +5,8 @@ import WelcomeItem from './WelcomeItem.vue'
 <template>
   <WelcomeItem>
     <template #icon>
+      <!-- <SupportIcon /> -->
     </template>
     <template #heading>Support Vue</template>
-  </WelcomeItem>
+</WelcomeItem>
 </template>

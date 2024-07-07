@@ -6,7 +6,7 @@
       <span v-if="!isView" style="color:#aaa;font-size:13px;display:inline-block;margin-left:20px">*文本编辑后请记得及时保存</span>
       <span v-else>&nbsp;</span>
     </div>
-    <div style="border: 1px solid #ccc; margin-top: 10px;">
+    <div style="border: 1px solid #ccc;" v-loading="uploading" element-loading-text="文件上传中...">
       <!-- 工具栏 -->
       <Toolbar :style="mode == 'edit' ? 'border-bottom:1px solid #ccc' : 'none'" :editor="editor"
         :defaultConfig="toolbarConfig" :mode="mode" />
@@ -22,7 +22,7 @@ import { ref, inject } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import axios from 'axios'
 import EnumModule from '@/common/module/index.js'
-// import { uploadImages } from '@/api/config'
+import { uploadImages } from '@/api/config'
 import { getUUID } from "@/utils/uuid";
 import { ElMessage } from 'element-plus'
 
@@ -51,17 +51,16 @@ export default {
   },
   data() {
     return {
+      uploading: false,
       editor: null,
-      // html: '<p>hello world</p>',
       html: '',
       toolbarConfig: {
         // toolbarKeys: [ /* 显示哪些菜单，如何排序、分组 */ ],
         // excludeKeys: [ /* 隐藏哪些菜单 */ ],
       },
       editorConfig: {
-        placeholder: '请输入内容...',
+        placeholder: '无内容',
         // autoFocus: false,
-
         // 所有的菜单配置，都要在 MENU_CONF 属性下
         MENU_CONF: {
           // 自定义上传图片
@@ -90,7 +89,8 @@ export default {
                 if (result.success) {
                   ElMessage.success('上传成功')
                   // 最后插入图片-回显
-                  insertFn("/helpcenter-web/helpt/api/md/get/" + fileUid + "_" + file.name);
+                  // insertFn("/helpcenter-web/helpt/api/md/get/" + fileUid + "_" + file.name);
+                  insertFn("/helpcenter-web/helpt/api/md/get/" + fileUid);
                 } else {
                   ElMessage.error(result.message)
                 }
@@ -126,7 +126,8 @@ export default {
                 if (result.success) {
                   ElMessage.success('上传成功')
                   // 最后插入视频-回显成功
-                  insertFn("/helpcenter-web/helpt/api/md/get/" + fileUid + "_" + file.name);
+                  // insertFn("/helpcenter-web/helpt/api/md/get/" + fileUid + "_" + file.name);
+                  insertFn("/helpcenter-web/helpt/api/md/get/" + fileUid);
                 } else {
                   ElMessage.error(result.message)
                 }
@@ -152,17 +153,15 @@ export default {
     }
   },
   async created() {
-
-    // const { data } = await axios.get('/api/md') //获取数据
-    // this.html = data
-
     //获取初始化数据
     this.html = this.htmlContent
 
-    //禁用修改
     const editor = this.editor
+
     if (editor == null) return
-    // editor.disable() // ==未到这里
+    // editor.disable()     // ==未到这里
+  },
+  mounted() {
   },
   methods: {
     checkImageSize(fileTypeList = ["image/jpeg", "image/jpg", "image/png"]) {
@@ -188,7 +187,6 @@ export default {
         this.toolbarConfig.excludeKeys = []
         this.toolbarConfig.toolbarKeys = toolbarConfigGlobal
       }
-
     },
     // 修改
     disableHandler() {
@@ -197,27 +195,16 @@ export default {
       //启用修改
       editor.enable()
     },
-
-    onChange(editor) {
-      //   console.log('onChange', editor.getHtml()) // onChange 时获取编辑器最新内容
-      this.html = editor.getHtml()
-    },
     submit() {
-      // console.log(typeof this.html, this.html)
       this.$emit('submit', this.html)
-      // const { data } = await axios.get('/api/save', {
-      //   params: { html: this.html }
-      // })
-      // if (data.states === 'ok') {
-      //   alert('保存成功')
-      //   this.html = data.data
-      //   const editor = this.editor
-      //   if (editor == null) return
-      //   //禁用修改
-      //   editor.disable()
-      // }
     },
-
+    // 编辑器内容变动
+    onChange(editor) {
+      // console.log('onChange', editor.getHtml()) // onChange 时获取编辑器最新内容
+      this.html = editor.getHtml()
+      // 上报上一级保存处理
+      this.$emit('changeEditorAndGetHtml', this.html)
+    },
   },
   beforeDestroy() {
     const editor = this.editor
@@ -228,3 +215,9 @@ export default {
 </script>
 
 <style src="@wangeditor/editor/dist/css/style.css"></style>
+<style lang="scss">
+:-webkit-any(article,aside,nav,section) h1 {
+    font-size: 2em;
+}
+
+</style>

@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+// import axios from 'axios'
 
 /**
  * getTopTabs获取顶部导航
@@ -12,11 +13,46 @@ export function getTopTabs(params) {
   })
 }
 
+// 新增导航
+export function addTopTabs(params) {
+  return request({
+    url: '/helpt/api/helpcenter/createTopTab',
+    method: 'post',
+    data: params,
+  })
+}
+
+// 编辑导航
+export function editTopTabs(params) {
+  return request({
+    url: '/helpt/api/helpcenter/editTopTab',
+    method: 'post',
+    data: params,
+  })
+}
+
+// 删除导航
+export function delTopTabs(params) {
+  return request({
+    url: '/helpt/api/helpcenter/deleteTopTab',
+    method: 'post',
+    data: params,
+  })
+}
+
 //获取侧边菜单
 export function getSideTabs(topId,params) {
   return request({
     url: `/helpt/api/helpcenter/sideTab?topId=${topId}`,
     method: 'get',
+    data: params,
+  })
+}
+// 上下移动菜单--只支持同级的上下移动
+export function moveSideTabs(params) {
+  return request({
+    url: '/helpt/api/helpcenter/move',
+    method: 'post',
     data: params,
   })
 }
